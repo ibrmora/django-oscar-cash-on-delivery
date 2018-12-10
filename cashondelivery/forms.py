@@ -1,18 +1,14 @@
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 
-from oscar.apps.payment import forms as payment_forms
-from oscar.core.loading import get_class
-from oscar.core.loading import get_classes
-from oscar.core.loading import get_model
+from oscar.core.loading import get_class, get_model
 
-
+OscarBillingAddressForm = get_class('payment.forms', 'BillingAddressForm')
 Country = get_model('address', 'Country')
 BillingAddress = get_model("order", "BillingAddress")
 
 
-class BillingAddressForm(payment_forms.BillingAddressForm):
-
+class BillingAddressForm(OscarBillingAddressForm):
     """
     Extended version of the core billing address form that adds a field so
     customers can choose to re-use their shipping address.
@@ -29,7 +25,7 @@ class BillingAddressForm(payment_forms.BillingAddressForm):
         label=_('Same as shipping')
     )
 
-    class Meta(payment_forms.BillingAddressForm):
+    class Meta(OscarBillingAddressForm):
         model = BillingAddress
         exclude = ('search_text', 'first_name', 'last_name')
 
@@ -50,6 +46,14 @@ class BillingAddressForm(payment_forms.BillingAddressForm):
             self.fields['same_as_shipping'].choices = (
                 (self.NEW_ADDRESS, _('Enter a new address')),)
             self.fields['same_as_shipping'].initial = self.NEW_ADDRESS
+
+        # We set the required attribute for fields with javascript in the frontend
+        # in payment_details.html template.
+        if shipping_address and data is None:
+            for field in self.fields:
+                if field != 'same_as_shipping':
+                    self.fields[field].required = False
+
 
         # If using same address as shipping, we don't need require any of the
         # required billing address fields.

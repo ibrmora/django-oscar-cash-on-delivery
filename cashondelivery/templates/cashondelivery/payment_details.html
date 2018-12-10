@@ -16,7 +16,7 @@
 {% block shipping_method %}{% endblock %}
 
 {% block payment_method %}
-    
+
     <p>{% trans "You've chosen to pay cash on delivery." %}</p>
 
     <div class="row-fluid">
@@ -52,22 +52,39 @@
                 {% include 'partials/form_field.html' with field=billing_address_form.postcode %}
                 {% include 'partials/form_field.html' with field=billing_address_form.country %}
                     </div>
-           
+
             <button type="submit" class="pull-right btn btn-large btn-primary">{% trans "Continue" %}</button>
         </form>
-                
-        </div>           
+
+        </div>
     </div>
 
 {% endblock payment_method %}
 
 
 {% block onbodyload %}
-    {# Toggle visibility of the billing address form #}
-    if ($("input[name='same_as_shipping']")[1].checked){
-        $("#billing_address_form").show();
-    } 
+    {# Toggle visibility of the billing address form & set required on fields #}
     $("input[name='same_as_shipping']").change(function(){
-        $("#billing_address_form").toggle();
+
+        if($("input[name='same_as_shipping']")[1].checked)
+          {
+            $("#id_line1").prop('required', true);
+            $("label[for='id_line1']").prop('class','control-label required');
+            $("#id_line4").prop('required', true);
+            $("label[for='id_line4']").prop('class','control-label required');
+            $("#id_postcode").prop('required', true);
+            $("label[for='id_postcode']").prop('class','control-label required');
+            $("#billing_address_form").show();
+          }
+
+        else
+
+          {
+            $("#id_line1").prop('required', false);
+            $("#id_line4").prop('required', false);
+            $("#id_postcode").prop('required', false);
+            $("#billing_address_form").toggle();
+          }
+
     });
 {% endblock %}
