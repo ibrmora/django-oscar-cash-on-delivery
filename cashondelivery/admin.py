@@ -7,9 +7,8 @@ class CashOnDeliveryTransactionAdmin(admin.ModelAdmin):
         'order_number',
         'method',
         'amount',
+        'currency',
         'reference',
-        'confirmed',
-        'date_confirmed',
         'date_created'
     ]
 

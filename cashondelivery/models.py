@@ -3,6 +3,7 @@ import uuid
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
+from oscar.core.compat import AUTH_USER_MODEL
 
 def _make_uuid():
     return str(uuid.uuid4())
@@ -19,6 +20,14 @@ class CashOnDeliveryTransaction(models.Model):
         _('Reference'), max_length=100, blank=True, unique=True, default=_make_uuid)
     confirmed = models.BooleanField(_('Confirmed'), default=False)
     date_confirmed = models.DateTimeField(_('Date Confirmed'), auto_now=True)
+
+    # Cash can be collected with non staff user so we don't
+    # always have a user ID.
+    cash_collector = models.ForeignKey(
+        AUTH_USER_MODEL, verbose_name=_("Cash Collector"), null=True,
+        blank=True, on_delete=models.PROTECT, related_name='txns', )
+
+    txn_note = models.TextField(_("Transaction Note"), null=True, blank=True)
 
     class Meta:
         ordering = ('-date_created',)

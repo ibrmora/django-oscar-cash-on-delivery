@@ -29,11 +29,11 @@
             <thead>
             <tr>
                 <th>{% trans "Reference hash" %}</th>
-                <th>{% trans "Method" %}</th>
                 <th>{% trans "Order Number" %}</th>
                 <th>{% trans "Amount" %}</th>
                 <th>{% trans "Confirmed" %}</th>
                 <th>{% trans "Date Confirmed" %}</th>
+                <th>{% trans "Cash Collector" %}</th>
                 <th>{% trans "Date" %}</th>
             </tr>
             </thead>
@@ -43,13 +43,13 @@
                     <td>
                         <a href="{% url 'cashondelivery-transaction-detail' txn.id %}">{{ txn.reference|default:"-" }}</a>
                     </td>
-                    <td>{{ txn.method }}</td>
                     <td>
                         <a href="{% url 'dashboard:order-detail' number=txn.order_number %}">{{ txn.order_number|default:"-" }}</a>
                     </td>
                     <td>{{ txn.amount|currency|default:"-" }} {{ txn.currency }}</td>
                     <td>{{ txn.confirmed }}</td>
                     <td>{% if txn.confirmed %}{{ txn.date_confirmed }}{% else %} - {% endif %}</td>
+                    <td>{{ txn.cash_collector }}</td>
                     <td>{{ txn.date_created }}</td>
                 </tr>
             {% endfor %}

@@ -34,6 +34,8 @@
             <tr><th>{% trans "Currency" %}</th><td>{{ txn.currency }}</td></tr>
             <tr><th>{% trans "Confirmed" %}</th><td>{{ txn.confirmed }}</td></tr>
             <tr><th>{% trans "Date confirmed" %}</th><td>{% if txn.confirmed %}{{ txn.date_confirmed }}{% else %} - {% endif %}</td></tr>
+            <tr><th>{% trans "Cash collector" %}</th><td>{% if txn.confirmed %}{{ txn.cash_collector }}{% else %} - {% endif %}</td></tr>
+            <tr><th>{% trans "Transaction note" %}</th><td>{{ txn.txn_note }}</td></tr>
         </tbody>
     </table>
 {% endblock dashboard_content %}
